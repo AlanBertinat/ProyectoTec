@@ -4,6 +4,7 @@ var logueado = 0;
 
 $(document).ready(function(){
 
+
 function SiCargo(){
     if(logueado == 1){
       $("#DivInicioSesion").hide();
@@ -26,17 +27,26 @@ $("#btnRegistrarse").click(function(){
       var con = $("#txtContraseña").val();
       if((nom == "") || ( user == "") || ( con == "" )){
           $("#lblmsjRegistroo").text("Complete todos los campos");
-      }
-      if(localStorage.length == 0){
-        var usuario = usuarios(user,nom,con);
-        Limpiarcampos();
+          $("#lblmsjRegistroo").show();
+          setTimeout(showTooltip, 1000);
       }
       else{
+      if(localStorage.length == 0){
+        var usuario = usuarios(user,nom,con);
+        localStorage.setItem(usuario.usuario,JSON.stringify(usuario));
+        $("#lblmsjRegistroo").text("Bienvenido/a  " + usuario.usuario);
+        $("#lblmsjRegistroo").show();
+        setTimeout(showTooltip, 1000);
+        Limpiarcampos();
+      }
+      else {
         for(var i=0; i < localStorage.length ; i ++){
             if(localStorage.key(i) == user){
                 $("#lblmsjRegistroo").text("Este usuario ya existe");
                 $("#lblmsjRegistroo").show();
                 setTimeout(showTooltip, 1000);
+                Limpiarcampos();
+                return;
             }
             else{
             var usuario = usuarios(user,nom,con);
@@ -44,11 +54,15 @@ $("#btnRegistrarse").click(function(){
             localStorage.setItem(usuario.usuario,JSON.stringify(usuario));
 
             $("#lblmsjRegistroo").text("Bienvenido/a  " + usuario.usuario);
+            $("#lblmsjRegistroo").show();
+            setTimeout(showTooltip, 1000);
             $("#menu-toggle").attr("disabled", false);
             Limpiarcampos();
+            return;
             }
         }
         }
+      }
 });
 function usuarios(user,nom,con)
   {
@@ -70,19 +84,18 @@ function hideTooltip()
    $("#lblmsjRegistroo").hide("slow");
 }
 
-
 //Funcionalidad de Inicio de sesión
-
 $("#btnIngresar").click(function(){
         var user =  $("#user").val();
         var con = $("#pas").val();
         var userguardado = JSON.parse(localStorage.getItem(user));
+        if(localStorage.length > 0){
         if ((user == "") || (con == "")){
             $("#lblmsjlogin").text("complete todos los campos");
+            $("#lblmsjlogin").show();
+            setTimeout(showTooltipa, 1000);
         }
         else if ((userguardado.usuario == user) && (userguardado.contraseña == con)){
-            $("#lblmsjlogin").text("Ingreso con éxito");
-            $("#nombreactual").text(user);
             habilitar();
             SiCargo();
             logueado = 1;
@@ -90,9 +103,17 @@ $("#btnIngresar").click(function(){
         else {
             Limpiarcampos();
             $("#lblmsjlogin").text("Usuario o contraseña incorrecto");
-            $("#lblmsjabm").show();
+            $("#lblmsjlogin").show();
             setTimeout(showTooltipa, 1000);
         }
+      }else
+      {
+
+        $("#lblmsjlogin").text("Aun no existen usuario registrados!");
+            $("#lblmsjlogin").show();
+            setTimeout(showTooltipa, 1000);
+            Limpiarcampos();
+      }
 });
 
 //Muestra y oculta alertas del inicio de sesion!
