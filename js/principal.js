@@ -19,28 +19,20 @@ $(document).ready(function(){
     //Muestra divisa segun lo desee el usuario (2da Funcionalidad).
     $("#btndivisa1").click(function(){
         var busc = $("#txtapi2").val();
-        if(busc != ""){
-            $.getJSON('https://mindicador.cl/api/' + busc , function(data) {
-                var dato = data;
-                if (dato != null){
-                    $("#tblcodigo1").text(dato.codigo);
-                    $("#tblfecha1").text(dato.serie[0].fecha);
-                    $("#tblnombre1").text(dato.nombre);
-                    $("#tblum1").text(dato.unidad_medida);
-                    $("#tblvalor1").text(dato.serie[0].valor);
-                    $("#txtapi2").val("");
-                }
-                else{
-                    $("#msj").text('Error al consumir la API ');
-                }
-            });
-        }
-        else
-        {
-            $("#lblmsjprinci").text("Ingrese el nombre de la divisa deseada");
-            $("#lblmsjprinci").show();
-            setTimeout(showTooltip, 1000);
-        }
+        $.getJSON('https://mindicador.cl/api/' + busc , function(data) {
+            var dato = data;
+            if (dato != null){
+                $("#tblcodigo1").text(dato.codigo);
+                $("#tblfecha1").text(dato.serie[0].fecha);
+                $("#tblnombre1").text(dato.nombre);
+                $("#tblum1").text(dato.unidad_medida);
+                $("#tblvalor1").text(dato.serie[0].valor);
+                $("#txtapi2").val("");
+            }
+            else{
+                $("#msj").text('Error al consumir la API ');
+            }
+        });
     });
 
     //Usando Api de usuario random (3er Funcionalidad).
@@ -59,9 +51,7 @@ $(document).ready(function(){
 
     //Usando api de mercado libre (4ta Funcionalidad).
     $("#btnbusqueda").click(function(){
-
     var busqueda =  $("#busquedaml").val();
-    if(busqueda != ""){
         $.getJSON('https://api.mercadolibre.com/sites/MLU/search?q=valor_busqueda/'+ busqueda , function(datos) {
             var dato =  datos;
             var table = $('#tblmercadolibre');
@@ -81,30 +71,5 @@ $(document).ready(function(){
                 }
         }
         });
-    }else{
-        $("#lblmsjprinc").text("Ingrese el nombre del producto deseado");
-        $("#lblmsjprinc").show();
-        setTimeout(showTooltipa, 1000);
-    }
     });
 });
-
-//Oculta y muestra alertas (cajas vacias).
-function showTooltipa()
-{
-     $("#lblmsjprinc").show("slow");
-     setTimeout(hideTooltipa, 3000);
-}
-function hideTooltipa()
-{
- $("#lblmsjprinc").hide("slow");
-}
-function showTooltip()
-{
-     $("#lblmsjprinci").show("slow");
-     setTimeout(hideTooltip, 3000);
-}
-function hideTooltip()
-{
- $("#lblmsjprinci").hide("slow");
-}

@@ -35,12 +35,6 @@ $(document).ready(function(){
     });*/
 });
 
-//Cierra la pestaña (te vuelve hacia la pantalla principal)
-function cerrar() { 
-    window.open('','_parent',''); 
-    window.close(); 
- } 
-
 
 
 
